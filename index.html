@@ -1,71 +1,431 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Онлайн Магазин</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        body { padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #333; color: white; }
-        .menu { display: flex; gap: 20px; }
-        .menu a { color: white; text-decoration: none; }
-        .burger { display: none; font-size: 24px; cursor: pointer; }
-        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-        .product { border: 1px solid #ddd; padding: 10px; text-align: center; cursor: pointer; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 5px; text-align: center; }
-        .close { cursor: pointer; color: red; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            font-family: "Unbounded", serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+        svg {
+            max-width: 100px;
+            max-height: 50px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #333;
+            color: white;
+            width: 100%;
+        }
+
+
+        .menu {
+            display: flex;
+            gap: 20px;
+            font-size: 20px;
+
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .catalog {
+            min-width: 200px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            max-height: 100%;
+            min-height: 100%;
+        }
+
+        .catalog h2 {
+            margin-bottom: 10px;
+        }
+
+        .catalog ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .catalog li {
+            margin-bottom: 5px;
+        }
+
+        .catalog a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid rgb(94, 124, 28);
+        }
+
+        .products {
+            display: flex;
+            padding-top: 50px;
+            max-width: 100%;
+            justify-content: center;
+        }
+
+        .products_container {
+            display: flex;
+            align-items: center;
+            column-gap: 130px;
+            text-align: center;
+            flex-flow: row wrap;
+            width: 80%;
+            /* Remove height: 350px; */
+            /* Important! */
+            justify-content: center;
+        }
+
+
+        .product img {
+            max-width: 200px;
+            height: 286px;
+        }
+
+        .product {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            padding-bottom: 25px;
+            height: 400px;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #modal-desc{
+            padding-bottom: 10px;
+        }
+
+        .close {
+            cursor: pointer;
+            color: red;
+        }
+
+        .burger {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .footer {
+            display: flex;
+            padding-top: 20px;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .footer_block {
+            display: flex;
+            max-width: 9%;
+            text-align: center;
+            flex-direction: column;
+        }
+
         @media (max-width: 768px) {
-            .menu { display: none; flex-direction: column; background: #333; position: absolute; top: 50px; right: 0; width: 50%; }
-            .menu a { padding: 10px; display: block; }
-            .burger { display: block; }
+            body {
+                flex-direction: column;
+            }
+
+            main {
+                flex-direction: column;
+            }
+
+            .catalog {
+                width: 100%;
+            }
+
+            .products {
+                padding: 10px;
+            }
+
+            .menu {
+                flex-direction: column;
+                background: #333;
+                position: absolute;
+                top: 50px;
+                right: 0;
+                width: 50%;
+                transition: all 0.3s ease;
+                z-index: 10;
+                display: none;
+            }
+
+            .menu a {
+                padding: 10px;
+                display: block;
+            }
+
+            .burger {
+                display: block;
+            }
+
+            .menu.open {
+                display: flex;
+            }
+        }
+
+        button {
+            display: inline-block;
+            padding: 12px 15px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            background-color: #717171;
+            /* background-color: #000000; */
+            /* background: linear-gradient(253deg, rgba(40,40,40,1) 15%, rgba(113,113,113,1) 100%); */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: auto;
+            min-width: 150px;
+            position: relative;
+            overflow: hidden;
+            font-family: "Unbounded", serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+        button:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
+
 <body>
     <header class="header">
-        <h1>Магазин</h1>
-        <div class="burger">☰</div>
-        <nav class="menu">
+        <svg width="143" height="118" viewBox="0 0 143 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M75.7576 111.33C73.7749 114.173 69.5715 114.185 67.5722 111.354L15.9206 38.2092C13.5857 34.9026 15.9425 30.3369 19.9903 30.325L122.864 30.0239C126.912 30.0121 129.296 34.564 126.98 37.8841L75.7576 111.33Z"
+                fill="white" />
+            <path
+                d="M92.428 51.896H90.628V68.096H92.428V74H78.82V68.096H80.548V55.496L74.428 74H69.1L62.8 55.676V68.096H64.528V74H52.72V68.096H54.52V51.896H52.72V45.992H69.208L72.952 57.224L76.552 45.992H92.428V51.896Z"
+                fill="black" />
+        </svg>
+        <div class="burger js-burger">☰</div>
+        <nav class="menu js-menu">
             <a href="#">Главная</a>
             <a href="#">Каталог</a>
             <a href="#">Контакты</a>
         </nav>
     </header>
-    <section class="products">
-        <div class="product" data-name="Товар 1" data-desc="Описание товара 1">Товар 1</div>
-        <div class="product" data-name="Товар 2" data-desc="Описание товара 2">Товар 2</div>
-        <div class="product" data-name="Товар 3" data-desc="Описание товара 3">Товар 3</div>
-    </section>
-    <div class="modal">
+
+    <main>
+        <aside class="catalog">
+            <h2>Каталог</h2>
+            <ul>
+                <li><a href="#" data-category="all" class="js-category-link">Все товары</a></li>
+                <li><a href="#" data-category="men" class="js-category-link">Мужская одежда</a></li>
+                <li><a href="#" data-category="women" class="js-category-link">Женская одежда</a></li>
+            </ul>
+        </aside>
+
+        <section class="products">
+            <div class="products_container">
+                <div class="product js-product" data-name="Свитер" data-desc="Описание товара 1"
+                    data-image="./img/tovar_1.png" data-category="women">
+                    <div class="foto">
+                        <img src="./img/tovar_1.png" alt="">
+                        <p>Свитер</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Платье" data-desc="Описание товара 2"
+                    data-image="./img/tovar_2.png" data-category="women">
+                    <div class="foto">
+                        <img src="./img/tovar_2.png" alt="">
+                        <p>Платье</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Платье" data-desc="Описание товара 3"
+                    data-image="./img/tovar_3.png" data-category="women">
+                    <div class="foto">
+                        <img src="./img/tovar_3.png" alt="">
+                        <p>Платье</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Платье" data-desc="Описание товара 3"
+                    data-image="./img/tovar_4.png" data-category="men">
+                    <div class="foto">
+                        <img src="./img/tovar_4.png" alt="">
+                        <p>Штаны</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Футболка" data-desc="Описание товара 3"
+                    data-image="./img/tovar_5.png" data-category="men">
+                    <div class="foto">
+                        <img src="./img/tovar_5.png" alt="">
+                        <p>Футболка</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Толстовка" data-desc="Описание товара 3"
+                    data-image="./img/tovar_6.png" data-category="men">
+                    <div class="foto">
+                        <img src="./img/tovar_6.png" alt="">
+                        <p>Толстовка</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Шапка" data-desc="Описание товара 3"
+                    data-image="./img/tovar_7.png" data-category="all">
+                    <div class="foto">
+                        <img src="./img/tovar_7.png" alt="">
+                        <p>Шапка</p>
+                    </div>
+                </div>
+                <div class="product js-product" data-name="Кепка" data-desc="Описание товара 3"
+                    data-image="./img/tovar_8.png" data-category="all">
+                    <div class="foto">
+                        <img src="./img/tovar_8.png" alt="">
+                        <p>Кепка</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal js-modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <img id="modal-image" src="" alt="Изображение товара" class="modal-image">
+            <span class="close js-close">&times;</span>
             <h2 id="modal-title"></h2>
             <p id="modal-desc"></p>
-            <button id="add-to-cart">Добавить в корзину</button>
+            <button id="add-to-cart" class="js-add-to-cart">Добавить в корзину</button>
         </div>
     </div>
+
+
+    <footer class="footer">
+        <div class="footer_block">
+            maga@mail.com
+            8 800 222-55-71
+
+        </div>
+        <div class="footer_block">
+            ©2025-2025 гг
+            ©ООО "Мага"
+        </div>
+        <div class="footer_block">
+            Москва, Кронштадский бульвар 37Б
+        </div>
+    </footer>
+
     <script>
-        document.querySelector('.burger').addEventListener('click', () => {
-            document.querySelector('.menu').classList.toggle('open');
-        });
-        
-        document.querySelectorAll('.product').forEach(item => {
-            item.addEventListener('click', () => {
-                document.getElementById('modal-title').textContent = item.dataset.name;
-                document.getElementById('modal-desc').textContent = item.dataset.desc;
-                document.querySelector('.modal').style.display = 'flex';
+        document.addEventListener('DOMContentLoaded', function () {
+            const burger = document.querySelector('.js-burger');
+            const menu = document.querySelector('.js-menu');
+            const products = document.querySelectorAll('.js-product');
+            const modal = document.querySelector('.js-modal');
+            const closeModalButton = document.querySelector('.js-close');
+            const addToCartButton = document.querySelector('.js-add-to-cart');
+            const categoryLinks = document.querySelectorAll('.js-category-link');
+
+
+            burger.addEventListener('click', () => {
+                menu.classList.toggle('open');
             });
-        });
-        
-        document.querySelector('.close').addEventListener('click', () => {
-            document.querySelector('.modal').style.display = 'none';
-        });
-        
-        document.getElementById('add-to-cart').addEventListener('click', () => {
-            alert('Товар добавлен в корзину!');
+
+
+
+            products.forEach(item => {
+                item.addEventListener('click', function () {
+                    document.getElementById('modal-image').src = item.dataset.image;
+                    document.getElementById('modal-title').textContent = this.dataset.name;
+                    document.getElementById('modal-desc').textContent = this.dataset.desc;
+                    modal.style.display = 'flex';
+                });
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            addToCartButton.addEventListener('click', () => {
+                alert('Товар добавлен в корзину!');
+            });
+
+            // Функция для фильтрации товаров по категории
+            function filterProducts(category) {
+                products.forEach(product => {
+                    if (category === 'all' || product.dataset.category === category) {
+                        product.style.display = 'block'; // Показываем товар
+                    } else {
+                        product.style.display = 'none'; // Скрываем товар
+                    }
+                });
+            }
+
+            // Обработчики кликов на ссылки категорий
+            categoryLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault(); // Предотвращаем переход по ссылке
+                    const category = this.dataset.category;
+                    filterProducts(category);
+                });
+            });
         });
     </script>
 </body>
+
 </html>
